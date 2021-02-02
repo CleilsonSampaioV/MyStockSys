@@ -8,4 +8,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyStockSys.Domain\MyStockSys.Domain.csproj" />
+    <ProjectReference Include="..\MyStockSys.infra.Data\MyStockSys.infra.Data.csproj" />
+  </ItemGroup>
+
 </Project>
