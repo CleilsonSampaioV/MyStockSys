@@ -52,7 +52,7 @@ namespace MyStockSys.Ui.Api.Controllers
         // PUT api/<PraductController>/5
         [HttpPatch]
         [Route("UpdatePrice")]
-        public async Task<IActionResult> UpdatePrice([FromBody] UpdateProductNameCommand command, [FromServices] ProductHandler handler)
+        public async Task<IActionResult> UpdatePrice([FromBody] UpdateProductPriceCommand command, [FromServices] ProductHandler handler)
         {
            return ResponseAsync(handler.Handle(command).Result as CommandResult);
         }

@@ -97,7 +97,6 @@ namespace MyStockSys.Domain.Handlers
 
             var product = _productRepository.GetById(command.Id);
 
-            // Verificar se Documento já está cadastrado
             if (product == null)
             {
                 AddNotification("Produto", "Produto não cadastrado");
@@ -115,7 +114,7 @@ namespace MyStockSys.Domain.Handlers
 
             if (product.Price <= 0)
             {
-                AddNotification("Produto.Preço","O valor da porcentagem gerou um valor de produto 0");
+                AddNotification("Produto.Preço","O valor da porcentagem gerou um valor de produto menor ou igual a 0");
             }
 
             // Checar as notificações
