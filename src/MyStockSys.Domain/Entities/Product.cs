@@ -35,17 +35,49 @@ namespace MyStockSys.Domain.Entities
 
         public void UpdateName(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         public void UpdateCategory(Category category)
         {
-            this.Category = category;
+            Category = category;
         }
 
-        public void UpdatePrice(Category category)
+        public void SetDiscontPrice(decimal percent)
         {
-            this.Category = category;
+            Price = Price - ((Price / 100) * percent);
+
+            if (Price <= 0)
+            {
+                AddNotification("Produto.Preço", "O valor do produto não pode ser menor do que 0");
+            }
+        }
+
+        public void SetIncreasePrice(decimal percent)
+        {
+            Price = Price + ((Price / 100) * percent);
+
+            if (Price <= 0)
+            {
+                AddNotification("Produto.Preço", "O valor do produto não pode ser menor do que 0");
+            }
+        }
+
+        public void IncreaseQuantity(int quantity)
+        {
+            Quantity = Quantity + quantity;
+
+
+        }
+
+        public void DecreseQuantity(int quantity)
+        {
+            Quantity = Quantity - quantity;
+
+            if (Quantity <= 0)
+            {
+                AddNotification("Produto.Quantidade", "A quantidade do produto não pode ser menor do que 0");
+            }
         }
     }
 }

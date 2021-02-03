@@ -18,7 +18,7 @@ namespace MyStockSys.Ui.Api.Controllers.Base
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult ResponseAsync(CommandResult commandResult)
+        protected IActionResult ResponseAsync(CommandResult commandResult)
         {
             if (commandResult.Success)
             {
@@ -37,11 +37,6 @@ namespace MyStockSys.Ui.Api.Controllers.Base
             {
                 return Ok(commandResult);
             }
-        }
-
-        public IActionResult ResponseExceptionAsync(Exception ex)
-        {
-            return BadRequest(new { errors = ex.Message, exception = ex.ToString() });
         }
     }
 }

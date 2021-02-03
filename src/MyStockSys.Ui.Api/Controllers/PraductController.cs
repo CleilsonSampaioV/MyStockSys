@@ -1,17 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MySchool.Domain.Queries;
+using MyStockSys.Domain.Commands;
+using MyStockSys.Domain.Commands.Product;
+using MyStockSys.Domain.Handlers;
 using MyStockSys.infra.Data.Repositories.Transactions;
 using MyStockSys.Ui.Api.Controllers.Base;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 
 namespace MyStockSys.Ui.Api.Controllers
 {
+    [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
     public class PraductController : CommonController
     {
-        public PraductController(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+        public PraductController(IUnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
 
         // GET: api/<PraductController>
         [HttpGet]
@@ -29,20 +36,32 @@ namespace MyStockSys.Ui.Api.Controllers
 
         // POST api/<PraductController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] AddProductCommand command, [FromServices] ProductHandler handler)
         {
+            return ResponseAsync(handler.Handle(command).Result as CommandResult);
         }
 
         // PUT api/<PraductController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPatch]
+        [Route("UpdateName")]
+        public async Task<IActionResult> UpdateName([FromBody] UpdateProductNameCommand command, [FromServices] ProductHandler handler)
         {
+          return ResponseAsync(handler.Handle(command).Result as CommandResult);
+        }
+
+        // PUT api/<PraductController>/5
+        [HttpPatch]
+        [Route("UpdatePrice")]
+        public async Task<IActionResult> UpdatePrice([FromBody] UpdateProductNameCommand command, [FromServices] ProductHandler handler)
+        {
+           return ResponseAsync(handler.Handle(command).Result as CommandResult);
         }
 
         // DELETE api/<PraductController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] DeleteProductCommand command, [FromServices] ProductHandler handler)
         {
+            return ResponseAsync(handler.Handle(command).Result as CommandResult);
         }
     }
 }

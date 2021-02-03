@@ -44,14 +44,7 @@ namespace MyStockSys.Domain.Handlers
 
             var product = new Product(command.Name, command.Price, command.Quantity);
 
-            if (command.Category == "Doce")
-            {
-                product.Category = Category.Candy;
-            }
-            else
-            {
-                product.Category = Category.Savory;
-            }
+            product.Category = command.Category == "Doce" ? Category.Candy : Category.Savory;
 
             // Checar as notificações
             if (Invalid)
@@ -74,28 +67,22 @@ namespace MyStockSys.Domain.Handlers
                 return new CommandResult(false, "Dados de entrada in válidos.", null);
             }
 
-            var school = _productRepository.GetById(command.Id);
+            var product = _productRepository.GetById(command.Id);
 
-            // Verificar se Documento já está cadastrado
-            if (school == null)
+            if (product == null)
             {
-                AddNotification("Escola", "Escola não cadastrada");
+                AddNotification("Produto", "Produto não cadastrada");
             }
-
-
-
-            // Agrupar as Validações
-            AddNotifications(school);
 
             // Checar as notificações
             if (Invalid)
                 return new CommandResult(false, "Não foi possível realizar o cadastro da Escola", this);
 
             // Salvar as Informações
-            _productRepository.Edit(school);
+            _productRepository.Edit(product);
 
             // Retornar informações
-            return new CommandResult(true, "Alteração realizada com sucesso!", school);
+            return new CommandResult(true, "Alteração realizada com sucesso!", product);
         }
 
         public async Task<ICommandResult> Handle(UpdateProductPriceCommand command)
@@ -108,26 +95,38 @@ namespace MyStockSys.Domain.Handlers
                 return new CommandResult(false, "Dados de entrada in válidos.", this);
             }
 
-            var school = _productRepository.GetById(command.Id);
+            var product = _productRepository.GetById(command.Id);
 
             // Verificar se Documento já está cadastrado
-            if (school == null)
+            if (product == null)
             {
-                AddNotification("Escola", "Escola não cadastrada");
+                AddNotification("Produto", "Produto não cadastrado");
+                return new CommandResult(false, "Produto não cadastrado.", null);
             }
 
-            // Agrupar as Validações
-            AddNotifications(school);
+            if (command.TypeOperation == TypeOperation.Acrescimo)
+            {
+                product.SetIncreasePrice(command.Percent);
+            }
+            else
+            {
+                product.SetDiscontPrice(command.Percent);
+            }
+
+            if (product.Price <= 0)
+            {
+                AddNotification("Produto.Preço","O valor da porcentagem gerou um valor de produto 0");
+            }
 
             // Checar as notificações
             if (Invalid)
-                return new CommandResult(false, "Não foi possível realizar o cadastro da Escola", this);
+                return new CommandResult(false, "Não foi possível realizar a alteração do preço", this);
 
             // Salvar as Informações
-            _productRepository.Edit(school);
+            _productRepository.Edit(product);
 
             // Retornar informações
-            return new CommandResult(true, "Alteração realizada com sucesso!", school);
+            return new CommandResult(true, "Alteração realizada com sucesso!", product);
         }
 
         public async Task<ICommandResult> Handle(DeleteProductCommand command)

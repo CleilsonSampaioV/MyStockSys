@@ -2,7 +2,7 @@
 {
     public enum TypeControl
     {
-        Purchase,
-        Sale
+        Purchase = 1,
+        Sale = 2
     }
 }

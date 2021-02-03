@@ -8,7 +8,13 @@ namespace MyStockSys.Domain.Entities
         public Guid ProductId { get; set; }
         public DateTime DtCreate { get; set; }
         public int Quantity { get; set; }
-        public Product Product { get; set; }
-        public TypeControl TypeControl { get; set; }
+        public int TypeControl { get; set; }
+
+        public InventoryControl(Guid productId,int quantity, int typeControl)
+        {
+            ProductId = productId;
+            Quantity = quantity;
+            TypeControl = typeControl;
+        }
     }
 }

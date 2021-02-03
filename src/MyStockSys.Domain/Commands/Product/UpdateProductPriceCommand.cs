@@ -9,9 +9,8 @@ namespace MyStockSys.Domain.Commands.Product
     public class UpdateProductPriceCommand : Notifiable, ICommand
     {
         public Guid Id { get; private set; }
-        public decimal Price { get; private set; }
+        public decimal Percent { get; private set; }
         public TypeOperation TypeOperation { get; set; }
-
         public void Validate()
         {
             AddNotifications(new Contract()
